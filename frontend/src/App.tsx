@@ -1,5 +1,6 @@
 import { useState, useEffect, useReducer, FormEvent } from 'react'
 import './App.css'
+import Dashboard from './Dashboard'
 
 const STORAGE_KEY = 'api_key'
 
@@ -71,6 +72,8 @@ function App() {
     setDraft('')
   }
 
+  const [showDashboard, setShowDashboard] = useState(false)
+
   if (!token) {
     return (
       <form className="token-form" onSubmit={handleConnect}>
@@ -87,13 +90,20 @@ function App() {
     )
   }
 
+  if (showDashboard) {
+    return <Dashboard onBack={() => setShowDashboard(false)} />
+  }
+
   return (
     <div>
       <header className="app-header">
         <h1>Items</h1>
-        <button className="btn-disconnect" onClick={handleDisconnect}>
-          Disconnect
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button onClick={() => setShowDashboard(true)}>Dashboard</button>
+          <button className="btn-disconnect" onClick={handleDisconnect}>
+            Disconnect
+          </button>
+        </div>
       </header>
 
       {fetchState.status === 'loading' && <p>Loading...</p>}
